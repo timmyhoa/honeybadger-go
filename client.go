@@ -110,7 +110,7 @@ func (client *Client) Handler(h http.Handler) http.Handler {
 }
 
 func (client *Client) GinRecoveryHandler() func(*gin.Context, interface{}) {
-	return func(ctx *gin.Context, a any) {
+	return func(ctx *gin.Context, err interface{}) {
 		r := ctx.Request
 		client.Notify(newError(err, 2), Params(r.Form), getCGIData(r), *r.URL)
 	}

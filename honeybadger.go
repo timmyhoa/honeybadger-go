@@ -103,7 +103,7 @@ func Handler(h http.Handler) http.Handler {
 	return DefaultClient.Handler(h)
 }
 
-func GinHandler() func(c *gin.Context, err any) {
+func GinHandler() func(c *gin.Context, err interface{}) {
 	return DefaultClient.GinRecoveryHandler()
 }
 
