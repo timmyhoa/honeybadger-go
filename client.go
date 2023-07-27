@@ -3,6 +3,8 @@ package honeybadger
 import (
 	"net/http"
 	"strings"
+
+	"github.com/gin-gonic/gin"
 )
 
 // The Payload interface is implemented by any type which can be handled by the
@@ -105,6 +107,13 @@ func (client *Client) Handler(h http.Handler) http.Handler {
 		h.ServeHTTP(w, r)
 	}
 	return http.HandlerFunc(fn)
+}
+
+func (client *Client) GinRecoveryHandler() func(*gin.Context, interface{}) {
+	return func(ctx *gin.Context, a any) {
+		r := ctx.Request
+		client.Notify(newError(err, 2), Params(r.Form), getCGIData(r), *r.URL)
+	}
 }
 
 // New returns a new instance of Client.

@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/url"
+
+	"github.com/gin-gonic/gin"
 )
 
 // VERSION defines the version of the honeybadger package.
@@ -73,10 +75,12 @@ func Notify(err interface{}, extra ...interface{}) (string, error) {
 // Monitor is used to automatically notify Honeybadger service of panics which
 // happen inside the current function. In order to monitor for panics, defer a
 // call to Monitor. For example:
-// 	func main {
-// 		defer honeybadger.Monitor()
-// 		// Do risky stuff...
-// 	}
+//
+//	func main {
+//		defer honeybadger.Monitor()
+//		// Do risky stuff...
+//	}
+//
 // The Monitor function re-panics after the notification has been sent, so it's
 // still up to the user to recover from panics if desired.
 func Monitor() {
@@ -97,6 +101,10 @@ func Flush() {
 // to Honeybadger and then re-panics.
 func Handler(h http.Handler) http.Handler {
 	return DefaultClient.Handler(h)
+}
+
+func GinHandler() func(c *gin.Context, err any) {
+	return DefaultClient.GinRecoveryHandler()
 }
 
 // BeforeNotify adds a callback function which is run before a notice is
