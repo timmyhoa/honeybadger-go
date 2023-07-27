@@ -1,4 +1,4 @@
-module github.com/honeybadger-io/honeybadger-go
+module github.com/timmyhoa/honeybadger-go
 
 go 1.12
 
