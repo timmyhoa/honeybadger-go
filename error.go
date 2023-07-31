@@ -1,6 +1,7 @@
 package honeybadger
 
 import (
+	"errors"
 	"fmt"
 	"reflect"
 	"runtime"
@@ -32,16 +33,22 @@ func NewError(msg interface{}) Error {
 	return newError(msg, 2)
 }
 
+func NewErrorWithCustomOffset(msg interface{}, stackOffset int) Error {
+	return newError(msg, stackOffset)
+}
+
 func newError(thing interface{}, stackOffset int) Error {
 	var err error
+	assertedError, ok := thing.(error)
 
-	switch t := thing.(type) {
-	case Error:
-		return t
-	case error:
-		err = t
-	default:
-		err = fmt.Errorf("%v", t)
+	if ok {
+		if errors.As(assertedError, &Error{}) {
+			return assertedError.(Error)
+		} else {
+			err = assertedError
+		}
+	} else {
+		err = fmt.Errorf("%v", assertedError)
 	}
 
 	return Error{
