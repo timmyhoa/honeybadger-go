@@ -139,3 +139,7 @@ func getCGIData(request *http.Request) CGIData {
 	}
 	return cgiData
 }
+
+func GetCGIData(r *http.Request) CGIData {
+	return getCGIData(r)
+}
