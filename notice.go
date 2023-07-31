@@ -173,7 +173,7 @@ func newNotice(config *Configuration, err Error, extra ...interface{}) *Notice {
 		case CGIData:
 			notice.CGIData = t
 		case url.URL:
-			notice.URL = t.String()
+			notice.URL = t.Path
 		}
 	}
 
